@@ -4,9 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Briansfomo | Intimate Gatherings</title>
+    <meta name="description" content="End loneliness. Create belonging. Build bridges. Curated gatherings across Johannesburg.">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Config -->
     <script>
         tailwind.config = {
             theme: {
@@ -21,33 +28,1148 @@
                     },
                     fontFamily: {
                         sans: ['Be Vietnam Pro', 'sans-serif'],
-                    }
+                    },
+                    animation: {
+                        'in': 'fadeIn 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                    },
                 }
             }
         }
     </script>
+    
+    <!-- Custom Styles -->
     <style>
         body {
             background-image: radial-gradient(#e5dddc 0.5px, transparent 0.5px);
             background-size: 20px 20px;
         }
+        
+        .animate-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .zoom-in {
+            animation: zoomIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Selection color */
+        ::selection {
+            background-color: rgba(231, 107, 85, 0.2);
+        }
     </style>
-
-<link rel="stylesheet" href="/index.css">
+    
+    <!-- React -->
     <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom": "https://esm.sh/react-dom@^19.2.3",
-    "react-dom/client": "https://esm.sh/react-dom@^19.2.3/client",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/"
-  }
-}
-</script>
-  <script type="module" crossorigin src="./index-BH2jbStU.js"></script>
+    {
+        "imports": {
+            "react": "https://esm.sh/react@19",
+            "react-dom": "https://esm.sh/react-dom@19",
+            "react-dom/client": "https://esm.sh/react-dom@19/client"
+        }
+    }
+    </script>
 </head>
 <body class="bg-background text-navy font-sans antialiased">
     <div id="root"></div>
+    
+    <script type="module">
+        import React, { useState } from 'react';
+        import { createRoot } from 'react-dom/client';
+
+        // ============================================
+        // BRIANSFOMO MVP PROTOTYPE - FIXED VERSION
+        // Valentine's Day 2026 Launch
+        // ============================================
+
+        // Vibe Pills Data (from Functional Spec)
+        const VIBE_PILLS = [
+          { id: 'deep-conversations', label: 'Deep Conversations', category: 'social' },
+          { id: 'light-playful', label: 'Light & Playful', category: 'social' },
+          { id: 'good-listener', label: 'Good Listener', category: 'social' },
+          { id: 'storyteller', label: 'Storyteller', category: 'social' },
+          { id: 'quiet-presence', label: 'Quiet Presence', category: 'social' },
+          { id: 'foodie', label: 'Foodie', category: 'interests' },
+          { id: 'music-lover', label: 'Music Lover', category: 'interests' },
+          { id: 'bookworm', label: 'Bookworm', category: 'interests' },
+          { id: 'creative-soul', label: 'Creative Soul', category: 'interests' },
+          { id: 'wellness-minded', label: 'Wellness Minded', category: 'interests' },
+          { id: 'culture-curious', label: 'Culture Curious', category: 'interests' },
+          { id: 'nature-lover', label: 'Nature Lover', category: 'interests' },
+          { id: 'first-timer', label: 'First Timer', category: 'style' },
+          { id: 'connector', label: 'Connector', category: 'style' },
+          { id: 'solo-explorer', label: 'Solo Explorer', category: 'style' },
+          { id: 'open-book', label: 'Open Book', category: 'style' },
+        ];
+
+        // Event Categories
+        const EVENT_CATEGORIES = [
+          { id: 'sit', label: 'Come sit with us', desc: 'Shared meals, dinners' },
+          { id: 'walk', label: 'Come walk with us', desc: 'Hikes, tours, walks' },
+          { id: 'listen', label: 'Come listen with us', desc: 'Music, poetry, storytelling' },
+          { id: 'play', label: 'Come play with us', desc: 'Games, sports, creative' },
+          { id: 'quiet', label: 'Come be quiet with us', desc: 'Meditation, reading' },
+        ];
+
+        // Sample Events Data
+        const SAMPLE_EVENTS = [
+          {
+            id: '1',
+            title: 'Sunday Soul Food & Jazz',
+            type: 'Come sit with us',
+            category: 'sit',
+            curator: { name: 'Thabo', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face', since: '2023', bio: 'Keeping the spirit of Ubuntu alive through food and music.' },
+            date: 'Sat, Feb 14',
+            time: '7:00 PM',
+            location: 'Soweto',
+            price: 250,
+            capacity: 8,
+            spotsLeft: 3,
+            image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=400&fit=crop',
+            description: 'An intimate evening of soul food, jazz, and real conversation.',
+            houseRules: 'Shoes off at the door. Phones away during dinner.',
+            whatsIncluded: 'Three-course meal, non-alcoholic beverages, live jazz',
+            whatToBring: 'BYOB if you want wine. Bring your best story.',
+          },
+          {
+            id: '2',
+            title: "Valentine's Rooftop Dinner",
+            type: 'Come sit with us',
+            category: 'sit',
+            curator: { name: 'Amina', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face', since: '2024', bio: 'Cape Malay heritage meets modern connection.' },
+            date: 'Fri, Feb 14',
+            time: '6:30 PM',
+            location: 'Sandton',
+            price: 300,
+            capacity: 8,
+            spotsLeft: 2,
+            image: 'https://images.unsplash.com/photo-1529543544277-750e2dcc7376?w=600&h=400&fit=crop',
+            description: "Don't spend Valentine's alone. Join us for a magical rooftop dinner.",
+            houseRules: 'This is not a dating event. Come for connection, not romance.',
+            whatsIncluded: 'Five-course tasting menu, welcome drink, city views',
+            whatToBring: 'An open mind and empty stomach.',
+          },
+          {
+            id: '3',
+            title: 'Morning Hike & Coffee',
+            type: 'Come walk with us',
+            category: 'walk',
+            curator: { name: 'Zanele', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face', since: '2022', bio: 'Nature lover and community builder.' },
+            date: 'Sun, Feb 16',
+            time: '6:00 AM',
+            location: 'Johannesburg',
+            price: 150,
+            capacity: 10,
+            spotsLeft: 6,
+            image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&h=400&fit=crop',
+            description: 'Start your Sunday with movement, fresh air, and meaningful conversation.',
+            houseRules: 'Moderate fitness required. No headphones during the hike.',
+            whatsIncluded: 'Guided hike, post-hike coffee',
+            whatToBring: 'Water, comfortable shoes, sunscreen.',
+          },
+          {
+            id: '4',
+            title: 'Board Games & Braai',
+            type: 'Come play with us',
+            category: 'play',
+            curator: { name: 'Sipho', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face', since: '2024', bio: 'Bringing back the lost art of play.' },
+            date: 'Sat, Feb 15',
+            time: '2:00 PM',
+            location: 'Rosebank',
+            price: 200,
+            capacity: 8,
+            spotsLeft: 4,
+            image: 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?w=600&h=400&fit=crop',
+            description: 'Competitive but friendly board games, good food on the braai.',
+            houseRules: 'Sore losers welcome. Cheaters not so much.',
+            whatsIncluded: 'All games provided, braai meat and sides',
+            whatToBring: 'BYOB. Your game face.',
+          },
+        ];
+
+        const SA_BANKS = ['ABSA', 'Capitec', 'FNB', 'Nedbank', 'Standard Bank', 'African Bank', 'Investec', 'TymeBank'];
+        const JHB_AREAS = ['Sandton', 'Soweto', 'Rosebank', 'Melville', 'Braamfontein', 'Parkhurst', 'Fourways', 'Randburg', 'Midrand', 'Centurion', 'Pretoria', 'Other'];
+
+        // Helper Components
+        const e = React.createElement;
+
+        // Valentine's Banner
+        const ValentineBanner = ({ onExplore }) => {
+          const daysUntilValentines = Math.max(0, Math.ceil((new Date('2026-02-14') - new Date()) / (1000 * 60 * 60 * 24)));
+          
+          return e('div', { className: 'bg-gradient-to-r from-primary via-[#e85a47] to-primary text-white py-4 px-4' },
+            e('div', { className: 'max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3' },
+              e('div', { className: 'flex items-center gap-3' },
+                e('span', { className: 'material-symbols-outlined text-3xl animate-pulse' }, 'favorite'),
+                e('div', null,
+                  e('p', { className: 'font-black text-lg' }, "Don't spend Valentine's Day alone."),
+                  e('p', { className: 'text-white/80 text-sm' }, `${daysUntilValentines} days left • 20 dinners • 160 seats`)
+                )
+              ),
+              e('button', { onClick: onExplore, className: 'bg-white text-primary font-bold px-6 py-2 rounded-full hover:bg-white/90 transition-all hover:scale-105 active:scale-95 whitespace-nowrap' }, 'Find Your Table →')
+            )
+          );
+        };
+
+        // Header
+        const Header = ({ currentView, setView, userRole }) => {
+          const [menuOpen, setMenuOpen] = useState(false);
+          const [gatheringsOpen, setGatheringsOpen] = useState(false);
+
+          return e('header', { className: 'sticky top-0 z-50 w-full border-b border-[#e5dddc] bg-white/95 backdrop-blur-md px-4 md:px-8 py-3' },
+            e('div', { className: 'max-w-7xl mx-auto flex items-center justify-between' },
+              // Logo
+              e('div', { className: 'flex items-center gap-2 text-primary cursor-pointer', onClick: () => setView('home') },
+                e('div', { className: 'size-8' },
+                  e('svg', { fill: 'currentColor', viewBox: '0 0 48 48', xmlns: 'http://www.w3.org/2000/svg' },
+                    e('path', { d: 'M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z' })
+                  )
+                ),
+                e('span', { className: 'font-black text-xl tracking-tight text-navy' }, 'BRIANSFOMO')
+              ),
+              // Desktop Nav
+              e('nav', { className: 'hidden md:flex items-center gap-6 font-bold text-sm' },
+                e('div', { className: 'relative', onMouseEnter: () => setGatheringsOpen(true), onMouseLeave: () => setGatheringsOpen(false) },
+                  e('button', { className: `hover:text-primary transition-colors flex items-center gap-1 py-2 ${currentView.startsWith('explore') ? 'text-primary' : ''}` },
+                    'Gatherings',
+                    e('span', { className: 'material-symbols-outlined text-lg' }, 'expand_more')
+                  ),
+                  gatheringsOpen && e('div', { className: 'absolute left-0 mt-0 w-64 bg-white border border-[#e5dddc] rounded-2xl shadow-2xl py-3 overflow-hidden' },
+                    e('button', { onClick: () => { setView('explore'); setGatheringsOpen(false); }, className: 'w-full px-4 py-3 text-left hover:bg-primary/5 transition-colors' },
+                      e('div', { className: 'font-bold' }, 'All Gatherings'),
+                      e('div', { className: 'text-xs text-navy/50' }, 'Browse everything')
+                    ),
+                    ...EVENT_CATEGORIES.map(cat =>
+                      e('button', { key: cat.id, onClick: () => { setView(`explore-${cat.id}`); setGatheringsOpen(false); }, className: 'w-full px-4 py-3 text-left hover:bg-primary/5 transition-colors' },
+                        e('div', { className: 'font-bold' }, cat.label),
+                        e('div', { className: 'text-xs text-navy/50' }, cat.desc)
+                      )
+                    )
+                  )
+                ),
+                e('button', { onClick: () => setView('join-movement'), className: `hover:text-primary transition-colors py-2 ${currentView === 'join-movement' ? 'text-primary' : ''}` }, 'Join Movement'),
+                e('button', { onClick: () => setView('inclusivity'), className: `hover:text-primary transition-colors py-2 ${currentView === 'inclusivity' ? 'text-primary' : ''}` }, 'Our Promise'),
+                userRole === 'curator' && e('button', { onClick: () => setView('curator-dashboard'), className: 'hover:text-primary transition-colors py-2' }, 'Curator Dashboard')
+              ),
+              // Mobile Menu
+              e('button', { className: 'md:hidden p-2', onClick: () => setMenuOpen(!menuOpen) },
+                e('span', { className: 'material-symbols-outlined text-2xl' }, menuOpen ? 'close' : 'menu')
+              )
+            ),
+            menuOpen && e('div', { className: 'md:hidden absolute top-full left-0 w-full bg-white border-b border-[#e5dddc] shadow-lg py-4 px-4' },
+              e('div', { className: 'flex flex-col gap-2' },
+                e('button', { onClick: () => { setView('explore'); setMenuOpen(false); }, className: 'text-left py-3 px-4 rounded-xl hover:bg-primary/5 font-bold' }, 'Browse Gatherings'),
+                e('button', { onClick: () => { setView('join-movement'); setMenuOpen(false); }, className: 'text-left py-3 px-4 rounded-xl hover:bg-primary/5 font-bold' }, 'Join Movement'),
+                e('button', { onClick: () => { setView('inclusivity'); setMenuOpen(false); }, className: 'text-left py-3 px-4 rounded-xl hover:bg-primary/5 font-bold' }, 'Our Promise'),
+                e('button', { onClick: () => { setView('safe-exit'); setMenuOpen(false); }, className: 'text-left py-3 px-4 rounded-xl hover:bg-primary/5 font-bold' }, 'Safe Exit Protocol'),
+                e('hr', { className: 'my-2 border-[#e5dddc]' }),
+                e('button', { onClick: () => { setView('apply'); setMenuOpen(false); }, className: 'text-left py-3 px-4 rounded-xl hover:bg-primary/5 font-bold text-primary' }, 'Become a Curator')
+              )
+            )
+          );
+        };
+
+        // Footer
+        const Footer = ({ setView }) => e('footer', { className: 'bg-navy text-white py-16 px-4 md:px-8' },
+          e('div', { className: 'max-w-7xl mx-auto' },
+            e('div', { className: 'grid md:grid-cols-4 gap-12' },
+              e('div', { className: 'md:col-span-2' },
+                e('h3', { className: 'font-black text-2xl mb-2' }, 'BRIANSFOMO'),
+                e('p', { className: 'text-white/60 italic mb-6' }, '"Come be with us, Mntase."'),
+                e('p', { className: 'text-white/40 text-sm' }, 'End loneliness. Create belonging. Build bridges.')
+              ),
+              e('div', null,
+                e('h4', { className: 'font-bold text-white/80 mb-4' }, 'Platform'),
+                e('ul', { className: 'space-y-2 text-sm' },
+                  e('li', null, e('button', { onClick: () => setView('explore'), className: 'text-white/60 hover:text-primary transition-colors' }, 'Browse Events')),
+                  e('li', null, e('button', { onClick: () => setView('join-movement'), className: 'text-white/60 hover:text-primary transition-colors' }, 'Join the Movement')),
+                  e('li', null, e('button', { onClick: () => setView('apply'), className: 'text-white/60 hover:text-primary transition-colors' }, 'Become a Curator'))
+                )
+              ),
+              e('div', null,
+                e('h4', { className: 'font-bold text-white/80 mb-4' }, 'Belonging'),
+                e('ul', { className: 'space-y-2 text-sm' },
+                  e('li', null, e('button', { onClick: () => setView('safe-exit'), className: 'text-white/60 hover:text-primary transition-colors' }, 'Safe Exit Protocol')),
+                  e('li', null, e('button', { onClick: () => setView('inclusivity'), className: 'text-white/60 hover:text-primary transition-colors' }, 'Inclusivity Manifesto'))
+                )
+              )
+            ),
+            e('div', { className: 'mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-white/40' },
+              e('p', null, '© 2026 BRIANSFOMO. Curated with love in South Africa.'),
+              e('div', { className: 'flex gap-6' },
+                e('a', { href: '#', className: 'hover:text-primary transition-colors' }, 'Privacy'),
+                e('a', { href: '#', className: 'hover:text-primary transition-colors' }, 'Terms')
+              )
+            )
+          )
+        );
+
+        // Event Card
+        const EventCard = ({ event, onClick }) => e('div', { onClick, className: 'bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all cursor-pointer group hover:-translate-y-1' },
+          e('div', { className: 'relative h-48 overflow-hidden' },
+            e('img', { src: event.image, alt: event.title, className: 'w-full h-full object-cover group-hover:scale-105 transition-transform duration-500' }),
+            e('div', { className: 'absolute top-4 left-4' },
+              e('span', { className: 'bg-white/90 backdrop-blur-sm text-navy text-xs font-bold px-3 py-1 rounded-full' }, event.type)
+            ),
+            event.spotsLeft <= 3 && e('div', { className: 'absolute top-4 right-4' },
+              e('span', { className: 'bg-primary text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse' }, `${event.spotsLeft} spots left!`)
+            )
+          ),
+          e('div', { className: 'p-5' },
+            e('h3', { className: 'font-black text-lg mb-2 group-hover:text-primary transition-colors' }, event.title),
+            e('div', { className: 'flex items-center gap-2 text-sm text-navy/60 mb-3' },
+              e('span', { className: 'material-symbols-outlined text-base' }, 'calendar_today'),
+              `${event.date} • ${event.time}`
+            ),
+            e('div', { className: 'flex items-center gap-2 text-sm text-navy/60 mb-4' },
+              e('span', { className: 'material-symbols-outlined text-base' }, 'location_on'),
+              event.location
+            ),
+            e('div', { className: 'flex items-center justify-between' },
+              e('div', { className: 'flex items-center gap-2' },
+                e('img', { src: event.curator.avatar, alt: event.curator.name, className: 'size-8 rounded-full border-2 border-primary/20' }),
+                e('span', { className: 'text-sm font-medium' }, event.curator.name)
+              ),
+              e('span', { className: 'font-black text-primary' }, `R${event.price}`)
+            )
+          )
+        );
+
+        // Vibe Pill
+        const VibePill = ({ vibe, selected, onClick, disabled }) => e('button', {
+          type: 'button',
+          onClick,
+          disabled: disabled && !selected,
+          className: `px-4 py-2 rounded-full text-sm font-bold transition-all ${selected ? 'bg-primary text-white scale-105' : disabled ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-primary/10 text-navy hover:bg-primary/20 hover:scale-105'}`
+        }, vibe.label);
+
+        // Landing Page
+        const LandingPage = ({ setView }) => e('div', { className: 'animate-in fade-in duration-500' },
+          // Hero
+          e('section', { className: 'relative min-h-[80vh] flex items-center justify-center px-4 py-20 overflow-hidden' },
+            e('div', { className: 'absolute inset-0 bg-gradient-to-br from-background via-white to-primary/5' }),
+            e('div', { className: 'relative z-10 max-w-4xl mx-auto text-center' },
+              e('p', { className: 'text-primary font-bold tracking-widest uppercase mb-4' }, 'Ubuntu • I am because we are'),
+              e('h1', { className: 'text-5xl md:text-7xl font-black text-navy mb-6 leading-tight' },
+                'Curated gatherings',
+                e('br'),
+                e('span', { className: 'text-primary' }, 'anywhere.')
+              ),
+              e('p', { className: 'text-xl text-navy/60 mb-10 max-w-2xl mx-auto' },
+                'A global movement ending loneliness through intimate, trust-led gatherings. No car needed. No property needed. Just your table, your story.'
+              ),
+              e('div', { className: 'flex flex-wrap gap-4 justify-center' },
+                e('button', { onClick: () => setView('explore'), className: 'bg-primary text-white font-black h-14 px-10 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all' }, 'Find a Gathering'),
+                e('button', { onClick: () => setView('join-movement'), className: 'bg-white text-navy font-black h-14 px-10 rounded-2xl shadow-xl border-2 border-navy/10 hover:border-primary hover:text-primary hover:scale-105 active:scale-95 transition-all' }, 'Join the Movement')
+              )
+            )
+          ),
+          // Value Props
+          e('section', { className: 'py-20 px-4 bg-white' },
+            e('div', { className: 'max-w-6xl mx-auto' },
+              e('div', { className: 'text-center mb-16' },
+                e('p', { className: 'text-primary font-bold tracking-widest uppercase mb-2' }, 'The Vision'),
+                e('h2', { className: 'text-4xl font-black text-navy' }, 'Rebuilding intimacy in an isolated world.')
+              ),
+              e('div', { className: 'grid md:grid-cols-3 gap-8' },
+                [
+                  { icon: 'no_crash', title: 'No car needed', desc: "Unlike Uber, you don't need a vehicle to earn." },
+                  { icon: 'home_work', title: 'No property needed', desc: "Unlike Airbnb, you don't need a spare room." },
+                  { icon: 'table_restaurant', title: 'Just your table', desc: 'Your culture, your story, your welcome.' },
+                ].map((item, i) => e('div', { key: i, className: 'text-center p-8 rounded-3xl bg-gradient-to-br from-primary/5 to-transparent' },
+                  e('span', { className: 'material-symbols-outlined text-5xl text-primary mb-4' }, item.icon),
+                  e('h3', { className: 'font-black text-xl mb-2' }, item.title),
+                  e('p', { className: 'text-navy/60' }, item.desc)
+                ))
+              )
+            )
+          ),
+          // CTA
+          e('section', { className: 'py-20 px-4 bg-gradient-to-br from-primary/10 to-primary/5' },
+            e('div', { className: 'max-w-4xl mx-auto text-center' },
+              e('h2', { className: 'text-4xl font-black text-navy mb-6' }, 'Ready to find your table?'),
+              e('p', { className: 'text-xl text-navy/60 mb-10' }, "Join 160 strangers becoming friends this Valentine's Day."),
+              e('div', { className: 'flex flex-wrap gap-4 justify-center' },
+                e('button', { onClick: () => setView('explore'), className: 'bg-primary text-white font-black h-16 px-12 rounded-2xl text-lg shadow-xl hover:scale-105 active:scale-95 transition-all' }, 'Browse Gatherings'),
+                e('button', { onClick: () => setView('apply'), className: 'bg-navy text-white font-black h-16 px-12 rounded-2xl text-lg shadow-xl hover:scale-105 active:scale-95 transition-all' }, 'Become a Curator')
+              )
+            )
+          )
+        );
+
+        // Explore Page
+        const ExplorePage = ({ setView, setSelectedEvent, categoryFilter }) => {
+          const filteredEvents = categoryFilter ? SAMPLE_EVENTS.filter(ev => ev.category === categoryFilter) : SAMPLE_EVENTS;
+
+          return e('div', { className: 'max-w-7xl mx-auto px-4 py-12 animate-in fade-in duration-500' },
+            e('div', { className: 'mb-12' },
+              e('h1', { className: 'text-4xl font-black mb-4' }, 'Find a Gathering'),
+              e('p', { className: 'text-navy/60 text-lg' }, categoryFilter ? EVENT_CATEGORIES.find(c => c.id === categoryFilter)?.label : 'All gatherings across Johannesburg')
+            ),
+            e('div', { className: 'flex flex-wrap gap-3 mb-8' },
+              e('button', { onClick: () => setView('explore'), className: `px-5 py-2 rounded-full font-bold transition-all ${!categoryFilter ? 'bg-primary text-white' : 'bg-primary/10 text-navy hover:bg-primary/20'}` }, 'All'),
+              ...EVENT_CATEGORIES.map(cat => e('button', { key: cat.id, onClick: () => setView(`explore-${cat.id}`), className: `px-5 py-2 rounded-full font-bold transition-all ${categoryFilter === cat.id ? 'bg-primary text-white' : 'bg-primary/10 text-navy hover:bg-primary/20'}` }, cat.label))
+            ),
+            e('div', { className: 'grid md:grid-cols-2 lg:grid-cols-3 gap-8' },
+              filteredEvents.map(event => e(EventCard, { key: event.id, event, onClick: () => { setSelectedEvent(event); setView('event-detail'); } }))
+            ),
+            filteredEvents.length === 0 && e('div', { className: 'text-center py-20' },
+              e('span', { className: 'material-symbols-outlined text-6xl text-navy/20 mb-4' }, 'event_busy'),
+              e('h3', { className: 'text-2xl font-bold mb-2' }, 'No gatherings yet'),
+              e('p', { className: 'text-navy/60' }, 'Check back soon or become a curator to host!')
+            )
+          );
+        };
+
+        // Event Detail Page
+        const EventDetailPage = ({ event, setView, userProfile, setBookingStatus }) => {
+          const [applying, setApplying] = useState(false);
+          if (!event) return null;
+
+          const handleApply = () => {
+            if (!userProfile) { setView('mntase-apply'); return; }
+            setApplying(true);
+            setTimeout(() => { setBookingStatus('applied'); setView('booking-status'); }, 1500);
+          };
+
+          return e('div', { className: 'max-w-4xl mx-auto px-4 py-12 animate-in fade-in duration-500' },
+            e('button', { onClick: () => setView('explore'), className: 'flex items-center gap-2 text-navy/60 hover:text-primary mb-8 font-bold' },
+              e('span', { className: 'material-symbols-outlined' }, 'arrow_back'),
+              'Back to Gatherings'
+            ),
+            e('div', { className: 'relative h-80 rounded-3xl overflow-hidden mb-8' },
+              e('img', { src: event.image, alt: event.title, className: 'w-full h-full object-cover' }),
+              e('div', { className: 'absolute inset-0 bg-gradient-to-t from-black/60 to-transparent' }),
+              e('div', { className: 'absolute bottom-6 left-6 text-white' },
+                e('span', { className: 'bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-bold mb-2 inline-block' }, event.type),
+                e('h1', { className: 'text-4xl font-black' }, event.title)
+              )
+            ),
+            e('div', { className: 'grid md:grid-cols-3 gap-8' },
+              e('div', { className: 'md:col-span-2 space-y-8' },
+                e('div', { className: 'flex items-center gap-4 p-6 bg-primary/5 rounded-2xl' },
+                  e('img', { src: event.curator.avatar, alt: event.curator.name, className: 'size-16 rounded-full border-4 border-primary/20' }),
+                  e('div', null,
+                    e('p', { className: 'text-sm text-navy/60' }, 'Curated by'),
+                    e('p', { className: 'font-black text-xl' }, event.curator.name),
+                    e('p', { className: 'text-navy/60 text-sm' }, event.curator.bio)
+                  )
+                ),
+                e('div', null, e('h2', { className: 'font-black text-xl mb-4' }, 'About this gathering'), e('p', { className: 'text-navy/70 leading-relaxed' }, event.description)),
+                e('div', null, e('h2', { className: 'font-black text-xl mb-4' }, "What's included"), e('p', { className: 'text-navy/70' }, event.whatsIncluded)),
+                e('div', null, e('h2', { className: 'font-black text-xl mb-4' }, 'House rules'), e('p', { className: 'text-navy/70' }, event.houseRules)),
+                e('div', { className: 'p-6 bg-navy/5 rounded-2xl' },
+                  e('div', { className: 'flex items-start gap-4' },
+                    e('span', { className: 'material-symbols-outlined text-primary text-3xl' }, 'shield'),
+                    e('div', null,
+                      e('h3', { className: 'font-bold mb-2' }, 'Safe Exit Protocol'),
+                      e('p', { className: 'text-navy/60 text-sm' }, 'Belonging includes the right to leave. If you ever need to go, just say "Yizo, Mntase" — no questions asked.'),
+                      e('button', { onClick: () => setView('safe-exit'), className: 'text-primary font-bold text-sm mt-2 hover:underline' }, 'Learn more →')
+                    )
+                  )
+                )
+              ),
+              e('div', { className: 'md:col-span-1' },
+                e('div', { className: 'sticky top-32 bg-white border-2 border-navy/10 rounded-3xl p-6 shadow-xl' },
+                  e('div', { className: 'text-3xl font-black text-primary mb-2' }, `R${event.price}`),
+                  e('p', { className: 'text-navy/60 text-sm mb-6' }, 'per person'),
+                  e('div', { className: 'space-y-4 mb-6' },
+                    e('div', { className: 'flex items-center gap-3' },
+                      e('span', { className: 'material-symbols-outlined text-navy/40' }, 'calendar_today'),
+                      e('div', null, e('p', { className: 'font-bold' }, event.date), e('p', { className: 'text-sm text-navy/60' }, event.time))
+                    ),
+                    e('div', { className: 'flex items-center gap-3' },
+                      e('span', { className: 'material-symbols-outlined text-navy/40' }, 'location_on'),
+                      e('div', null, e('p', { className: 'font-bold' }, event.location), e('p', { className: 'text-sm text-navy/60' }, 'Full address after approval'))
+                    ),
+                    e('div', { className: 'flex items-center gap-3' },
+                      e('span', { className: 'material-symbols-outlined text-navy/40' }, 'group'),
+                      e('p', { className: 'font-bold' }, `${event.spotsLeft} of ${event.capacity} spots left`)
+                    )
+                  ),
+                  e('button', { onClick: handleApply, disabled: applying, className: 'w-full bg-primary text-white font-black py-4 rounded-2xl hover:bg-primary/90 transition-all disabled:opacity-50' }, applying ? 'Applying...' : userProfile ? 'Apply to Book' : 'Sign Up to Book'),
+                  e('p', { className: 'text-xs text-navy/40 text-center mt-4' }, 'The curator will review your profile before confirming.')
+                )
+              )
+            )
+          );
+        };
+
+        // Join Movement Page
+        const JoinMovementPage = ({ setView }) => e('div', { className: 'max-w-5xl mx-auto px-4 py-20 animate-in fade-in duration-500' },
+          e('div', { className: 'text-center mb-16' },
+            e('h1', { className: 'text-5xl font-black mb-4' }, 'Choose Your Path'),
+            e('p', { className: 'text-xl text-navy/60 max-w-2xl mx-auto' }, 'Every great community is built by two kinds of people: those who bring the spirit, and those who hold the space.')
+          ),
+          e('div', { className: 'grid md:grid-cols-2 gap-8' },
+            // Mntase Path
+            e('div', { className: 'bg-white rounded-3xl p-8 shadow-xl border-2 border-transparent hover:border-primary transition-all' },
+              e('div', { className: 'size-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6' },
+                e('span', { className: 'material-symbols-outlined text-primary text-3xl' }, 'person_pin')
+              ),
+              e('h2', { className: 'text-3xl font-black mb-4' }, 'Become a Mntase'),
+              e('p', { className: 'text-navy/60 mb-6' }, 'Join as a guest to find intimate tables, make real friends, and experience the healing power of community.'),
+              e('ul', { className: 'space-y-3 mb-8' },
+                ['Vetted access to private gatherings', 'Curate your personal vibe profile', 'Protected by Safe Exit Protocol', 'Connect with like-minded humans'].map((item, i) =>
+                  e('li', { key: i, className: 'flex items-center gap-3' },
+                    e('span', { className: 'material-symbols-outlined text-primary' }, 'check_circle'),
+                    e('span', { className: 'text-navy/70' }, item)
+                  )
+                )
+              ),
+              e('button', { onClick: () => setView('mntase-apply'), className: 'w-full bg-primary text-white font-black py-4 rounded-2xl hover:bg-primary/90 transition-all' }, 'Apply to Join')
+            ),
+            // Curator Path
+            e('div', { className: 'bg-white rounded-3xl p-8 shadow-xl border-2 border-transparent hover:border-navy transition-all' },
+              e('div', { className: 'size-16 rounded-2xl bg-navy/10 flex items-center justify-center mb-6' },
+                e('span', { className: 'material-symbols-outlined text-navy text-3xl' }, 'auto_awesome')
+              ),
+              e('h2', { className: 'text-3xl font-black mb-4' }, 'Become a Curator'),
+              e('p', { className: 'text-navy/60 mb-6' }, 'Open your table, share your story, and build sustainable income while fostering belonging.'),
+              e('ul', { className: 'space-y-3 mb-8' },
+                ['Earn R1,400+ per gathering (70%)', 'Total control over guest vetting', 'Tools to manage intimate events', 'Build a community reputation'].map((item, i) =>
+                  e('li', { key: i, className: 'flex items-center gap-3' },
+                    e('span', { className: 'material-symbols-outlined text-navy' }, 'verified'),
+                    e('span', { className: 'text-navy/70' }, item)
+                  )
+                )
+              ),
+              e('button', { onClick: () => setView('apply'), className: 'w-full bg-navy text-white font-black py-4 rounded-2xl hover:bg-navy/90 transition-all' }, 'Start Hosting')
+            )
+          )
+        );
+
+        // ============================================
+        // MNTASE APPLICATION (FIXED)
+        // ============================================
+        const MntaseApplicationPage = ({ setView, setUserProfile }) => {
+          const [step, setStep] = useState(1);
+          const [formData, setFormData] = useState({ firstName: '', lastName: '', cellNumber: '', intro: '', selectedVibes: [] });
+          const [errors, setErrors] = useState({});
+
+          const validateStep1 = () => {
+            const newErrors = {};
+            if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
+            if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
+            if (!formData.cellNumber.trim()) newErrors.cellNumber = 'Cell number is required';
+            else if (!/^(\+27|0)[0-9]{9}$/.test(formData.cellNumber.replace(/\s/g, ''))) newErrors.cellNumber = 'Please enter a valid SA cell number';
+            setErrors(newErrors);
+            return Object.keys(newErrors).length === 0;
+          };
+
+          const validateStep2 = () => {
+            const newErrors = {};
+            if (!formData.intro.trim()) newErrors.intro = 'Please write a short intro';
+            else if (formData.intro.length < 10) newErrors.intro = 'Please write at least 10 characters';
+            else if (formData.intro.length > 150) newErrors.intro = 'Please keep it under 150 characters';
+            setErrors(newErrors);
+            return Object.keys(newErrors).length === 0;
+          };
+
+          const validateStep3 = () => {
+            const newErrors = {};
+            if (formData.selectedVibes.length < 3) newErrors.vibes = 'Please select at least 3 vibes';
+            setErrors(newErrors);
+            return Object.keys(newErrors).length === 0;
+          };
+
+          const handleNext = () => {
+            if (step === 1 && validateStep1()) setStep(2);
+            else if (step === 2 && validateStep2()) setStep(3);
+            else if (step === 3 && validateStep3()) {
+              setUserProfile({ ...formData, role: 'mntase', status: 'pending' });
+              setView('mntase-pending');
+            }
+          };
+
+          const toggleVibe = (vibeId) => {
+            setFormData(prev => ({
+              ...prev,
+              selectedVibes: prev.selectedVibes.includes(vibeId)
+                ? prev.selectedVibes.filter(v => v !== vibeId)
+                : prev.selectedVibes.length < 5 ? [...prev.selectedVibes, vibeId] : prev.selectedVibes
+            }));
+          };
+
+          return e('div', { className: 'max-w-2xl mx-auto px-4 py-16 animate-in fade-in duration-500' },
+            // Progress
+            e('div', { className: 'flex items-center justify-center gap-2 mb-12' },
+              [1, 2, 3].map(s => e(React.Fragment, { key: s },
+                e('div', { className: `size-10 rounded-full flex items-center justify-center font-bold transition-all ${step >= s ? 'bg-primary text-white' : 'bg-navy/10 text-navy/40'}` }, s),
+                s < 3 && e('div', { className: `w-16 h-1 rounded ${step > s ? 'bg-primary' : 'bg-navy/10'}` })
+              ))
+            ),
+            // Step 1
+            step === 1 && e('div', { className: 'space-y-8' },
+              e('div', { className: 'text-center' },
+                e('h1', { className: 'text-4xl font-black mb-2' }, 'Join as Mntase'),
+                e('p', { className: 'text-navy/60' }, "Let's start with the basics")
+              ),
+              e('div', { className: 'space-y-6' },
+                e('div', null,
+                  e('label', { className: 'block font-bold mb-2' }, 'First Name'),
+                  e('input', { type: 'text', value: formData.firstName, onChange: ev => setFormData({...formData, firstName: ev.target.value}), placeholder: 'Your first name', className: `w-full px-5 py-4 rounded-2xl border-2 ${errors.firstName ? 'border-red-400' : 'border-navy/10'} focus:border-primary focus:outline-none transition-colors` }),
+                  errors.firstName && e('p', { className: 'text-red-500 text-sm mt-1' }, errors.firstName)
+                ),
+                e('div', null,
+                  e('label', { className: 'block font-bold mb-2' }, 'Last Name'),
+                  e('input', { type: 'text', value: formData.lastName, onChange: ev => setFormData({...formData, lastName: ev.target.value}), placeholder: 'Your last name', className: `w-full px-5 py-4 rounded-2xl border-2 ${errors.lastName ? 'border-red-400' : 'border-navy/10'} focus:border-primary focus:outline-none transition-colors` }),
+                  errors.lastName && e('p', { className: 'text-red-500 text-sm mt-1' }, errors.lastName)
+                ),
+                e('div', null,
+                  e('label', { className: 'block font-bold mb-2' }, 'Cell Number'),
+                  e('input', { type: 'tel', value: formData.cellNumber, onChange: ev => setFormData({...formData, cellNumber: ev.target.value}), placeholder: '072 123 4567', className: `w-full px-5 py-4 rounded-2xl border-2 ${errors.cellNumber ? 'border-red-400' : 'border-navy/10'} focus:border-primary focus:outline-none transition-colors` }),
+                  errors.cellNumber && e('p', { className: 'text-red-500 text-sm mt-1' }, errors.cellNumber)
+                )
+              ),
+              e('button', { onClick: handleNext, className: 'w-full bg-primary text-white font-black py-4 rounded-2xl hover:bg-primary/90 transition-all' }, 'Continue')
+            ),
+            // Step 2
+            step === 2 && e('div', { className: 'space-y-8' },
+              e('div', { className: 'text-center' },
+                e('h1', { className: 'text-4xl font-black mb-2' }, 'Introduce Yourself'),
+                e('p', { className: 'text-navy/60' }, "Write one sentence about yourself — the kind of thing you'd say when you sit down at a table.")
+              ),
+              e('div', null,
+                e('textarea', { value: formData.intro, onChange: ev => setFormData({...formData, intro: ev.target.value}), placeholder: "I'm a designer who loves jazz and terrible puns.", rows: 4, maxLength: 150, className: `w-full px-5 py-4 rounded-2xl border-2 ${errors.intro ? 'border-red-400' : 'border-navy/10'} focus:border-primary focus:outline-none transition-colors resize-none` }),
+                e('div', { className: 'flex justify-between mt-2' },
+                  errors.intro && e('p', { className: 'text-red-500 text-sm' }, errors.intro),
+                  e('p', { className: 'text-navy/40 text-sm ml-auto' }, `${formData.intro.length}/150`)
+                )
+              ),
+              e('div', { className: 'p-4 bg-primary/5 rounded-2xl' },
+                e('p', { className: 'text-sm text-navy/60' },
+                  e('span', { className: 'font-bold text-primary' }, 'Tip: '),
+                  'This intro will be shared with Curators and other guests before the gathering so no one arrives blind.'
+                )
+              ),
+              e('div', { className: 'flex gap-4' },
+                e('button', { onClick: () => setStep(1), className: 'flex-1 bg-navy/10 text-navy font-black py-4 rounded-2xl hover:bg-navy/20 transition-all' }, 'Back'),
+                e('button', { onClick: handleNext, className: 'flex-1 bg-primary text-white font-black py-4 rounded-2xl hover:bg-primary/90 transition-all' }, 'Continue')
+              )
+            ),
+            // Step 3
+            step === 3 && e('div', { className: 'space-y-8' },
+              e('div', { className: 'text-center' },
+                e('h1', { className: 'text-4xl font-black mb-2' }, 'Select Your Vibes'),
+                e('p', { className: 'text-navy/60' }, 'Choose 3-5 vibes that describe you. These help Curators match you with the right gatherings.')
+              ),
+              e('div', null,
+                e('div', { className: 'flex flex-wrap gap-3 justify-center' },
+                  VIBE_PILLS.map(vibe => e(VibePill, { key: vibe.id, vibe, selected: formData.selectedVibes.includes(vibe.id), onClick: () => toggleVibe(vibe.id), disabled: formData.selectedVibes.length >= 5 }))
+                ),
+                errors.vibes && e('p', { className: 'text-red-500 text-sm text-center mt-4' }, errors.vibes),
+                e('p', { className: 'text-center text-navy/40 text-sm mt-4' }, `${formData.selectedVibes.length}/5 selected (minimum 3)`)
+              ),
+              e('div', { className: 'flex gap-4' },
+                e('button', { onClick: () => setStep(2), className: 'flex-1 bg-navy/10 text-navy font-black py-4 rounded-2xl hover:bg-navy/20 transition-all' }, 'Back'),
+                e('button', { onClick: handleNext, className: 'flex-1 bg-primary text-white font-black py-4 rounded-2xl hover:bg-primary/90 transition-all' }, 'Submit Application')
+              )
+            )
+          );
+        };
+
+        // Mntase Pending
+        const MntasePendingPage = ({ setView }) => e('div', { className: 'max-w-2xl mx-auto px-4 py-40 text-center space-y-8 animate-in fade-in zoom-in duration-500' },
+          e('div', { className: 'size-24 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto' },
+            e('span', { className: 'material-symbols-outlined text-6xl' }, 'mark_email_read')
+          ),
+          e('h2', { className: 'text-4xl font-black' }, 'Belonging is around the corner.'),
+          e('p', { className: 'text-xl text-navy/60 leading-relaxed max-w-md mx-auto' }, "We've received your application to join the movement. Our community vetting process keeps the table safe for everyone. You'll hear from us within 48 hours!"),
+          e('div', { className: 'pt-8' },
+            e('button', { onClick: () => setView('home'), className: 'bg-navy text-white font-black px-10 py-4 rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition-all' }, 'Back to Home')
+          )
+        );
+
+        // ============================================
+        // CURATOR APPLICATION (FIXED)
+        // ============================================
+        const CuratorApplicationPage = ({ setView, setUserRole }) => {
+          const [step, setStep] = useState(1);
+          const [formData, setFormData] = useState({
+            firstName: '', lastName: '', cellNumber: '', email: '',
+            referralSource: '', referrerName: '', whyHost: '',
+            eventTypes: [], hostingLocation: '', locationArea: '', firstEventIdea: '',
+            bankAccountName: '', bankName: '', accountNumber: '', branchCode: ''
+          });
+          const [errors, setErrors] = useState({});
+
+          const validateStep1 = () => {
+            const errs = {};
+            if (!formData.firstName.trim()) errs.firstName = 'Required';
+            if (!formData.lastName.trim()) errs.lastName = 'Required';
+            if (!formData.cellNumber.trim()) errs.cellNumber = 'Required';
+            if (!formData.email.trim()) errs.email = 'Required';
+            else if (!/\S+@\S+\.\S+/.test(formData.email)) errs.email = 'Invalid email';
+            setErrors(errs);
+            return Object.keys(errs).length === 0;
+          };
+
+          const validateStep2 = () => {
+            const errs = {};
+            if (!formData.referralSource) errs.referralSource = 'Please tell us how you heard about us';
+            if (!formData.whyHost.trim()) errs.whyHost = 'Please tell us why you want to host';
+            else if (formData.whyHost.length < 50) errs.whyHost = 'Please write at least 50 characters';
+            setErrors(errs);
+            return Object.keys(errs).length === 0;
+          };
+
+          const validateStep3 = () => {
+            const errs = {};
+            if (formData.eventTypes.length === 0) errs.eventTypes = 'Select at least one';
+            if (!formData.hostingLocation.trim()) errs.hostingLocation = 'Required';
+            if (!formData.locationArea) errs.locationArea = 'Required';
+            if (!formData.firstEventIdea.trim()) errs.firstEventIdea = 'Required';
+            setErrors(errs);
+            return Object.keys(errs).length === 0;
+          };
+
+          const validateStep4 = () => {
+            const errs = {};
+            if (!formData.bankAccountName.trim()) errs.bankAccountName = 'Required';
+            if (!formData.bankName) errs.bankName = 'Required';
+            if (!formData.accountNumber.trim()) errs.accountNumber = 'Required';
+            if (!formData.branchCode.trim()) errs.branchCode = 'Required';
+            setErrors(errs);
+            return Object.keys(errs).length === 0;
+          };
+
+          const handleNext = () => {
+            if (step === 1 && validateStep1()) setStep(2);
+            else if (step === 2 && validateStep2()) setStep(3);
+            else if (step === 3 && validateStep3()) setStep(4);
+            else if (step === 4 && validateStep4()) {
+              setUserRole('curator-pending');
+              setView('apply-pending');
+            }
+          };
+
+          const toggleEventType = (id) => {
+            setFormData(prev => ({
+              ...prev,
+              eventTypes: prev.eventTypes.includes(id) ? prev.eventTypes.filter(t => t !== id) : [...prev.eventTypes, id]
+            }));
+          };
+
+          return e('div', { className: 'max-w-2xl mx-auto px-4 py-12 animate-in fade-in duration-500' },
+            // Progress
+            e('div', { className: 'flex items-center justify-center gap-2 mb-12' },
+              [1, 2, 3, 4].map(s => e(React.Fragment, { key: s },
+                e('div', { className: `size-10 rounded-full flex items-center justify-center font-bold transition-all ${step >= s ? 'bg-navy text-white' : 'bg-navy/10 text-navy/40'}` }, s),
+                s < 4 && e('div', { className: `w-12 h-1 rounded ${step > s ? 'bg-navy' : 'bg-navy/10'}` })
+              ))
+            ),
+            // Step 1
+            step === 1 && e('div', { className: 'space-y-8' },
+              e('div', { className: 'text-center' },
+                e('h1', { className: 'text-4xl font-black mb-2' }, 'Become a Curator'),
+                e('p', { className: 'text-navy/60' }, "Let's start with your details")
+              ),
+              e('div', { className: 'p-6 bg-primary/5 rounded-2xl' },
+                e('h3', { className: 'font-bold text-primary mb-2' }, 'What is a Curator?'),
+                e('p', { className: 'text-sm text-navy/70' }, 'Curators are trusted hosts who open their spaces for gatherings. You keep 70% of every ticket sold, control who joins your table, and build community on your terms.')
+              ),
+              e('div', { className: 'grid grid-cols-2 gap-4' },
+                e('div', null,
+                  e('label', { className: 'block font-bold mb-2' }, 'First Name'),
+                  e('input', { type: 'text', value: formData.firstName, onChange: ev => setFormData({...formData, firstName: ev.target.value}), className: `w-full px-4 py-3 rounded-xl border-2 ${errors.firstName ? 'border-red-400' : 'border-navy/10'} focus:border-navy focus:outline-none` }),
+                  errors.firstName && e('p', { className: 'text-red-500 text-xs mt-1' }, errors.firstName)
+                ),
+                e('div', null,
+                  e('label', { className: 'block font-bold mb-2' }, 'Last Name'),
+                  e('input', { type: 'text', value: formData.lastName, onChange: ev => setFormData({...formData, lastName: ev.target.value}), className: `w-full px-4 py-3 rounded-xl border-2 ${errors.lastName ? 'border-red-400' : 'border-navy/10'} focus:border-navy focus:outline-none` }),
+                  errors.lastName && e('p', { className: 'text-red-500 text-xs mt-1' }, errors.lastName)
+                )
+              ),
+              e('div', null,
+                e('label', { className: 'block font-bold mb-2' }, 'Cell Number'),
+                e('input', { type: 'tel', value: formData.cellNumber, onChange: ev => setFormData({...formData, cellNumber: ev.target.value}), placeholder: '072 123 4567', className: `w-full px-4 py-3 rounded-xl border-2 ${errors.cellNumber ? 'border-red-400' : 'border-navy/10'} focus:border-navy focus:outline-none` }),
+                errors.cellNumber && e('p', { className: 'text-red-500 text-xs mt-1' }, errors.cellNumber)
+              ),
+              e('div', null,
+                e('label', { className: 'block font-bold mb-2' }, 'Email'),
+                e('input', { type: 'email', value: formData.email, onChange: ev => setFormData({...formData, email: ev.target.value}), placeholder: 'you@example.com', className: `w-full px-4 py-3 rounded-xl border-2 ${errors.email ? 'border-red-400' : 'border-navy/10'} focus:border-navy focus:outline-none` }),
+                errors.email && e('p', { className: 'text-red-500 text-xs mt-1' }, errors.email)
+              ),
+              e('button', { onClick: handleNext, className: 'w-full bg-navy text-white font-black py-4 rounded-2xl hover:bg-navy/90 transition-all' }, 'Continue')
+            ),
+            // Step 2
+            step === 2 && e('div', { className: 'space-y-8' },
+              e('div', { className: 'text-center' },
+                e('h1', { className: 'text-4xl font-black mb-2' }, 'Tell Us About You'),
+                e('p', { className: 'text-navy/60' }, "We're building a referral-based trust network")
+              ),
+              e('div', null,
+                e('label', { className: 'block font-bold mb-2' }, 'How did you hear about us?'),
+                e('select', { value: formData.referralSource, onChange: ev => setFormData({...formData, referralSource: ev.target.value}), className: `w-full px-4 py-3 rounded-xl border-2 ${errors.referralSource ? 'border-red-400' : 'border-navy/10'} focus:border-navy focus:outline-none` },
+                  e('option', { value: '' }, 'Select one...'),
+                  e('option', { value: 'friend' }, 'Friend or family'),
+                  e('option', { value: 'social' }, 'Social media'),
+                  e('option', { value: 'radio' }, 'Radio interview'),
+                  e('option', { value: 'event' }, 'Attended an event'),
+                  e('option', { value: 'other' }, 'Other')
+                ),
+                errors.referralSource && e('p', { className: 'text-red-500 text-xs mt-1' }, errors.referralSource)
+              ),
+              formData.referralSource === 'friend' && e('div', null,
+                e('label', { className: 'block font-bold mb-2' }, 'Who referred you?'),
+                e('input', { type: 'text', value: formData.referrerName, onChange: ev => setFormData({...formData, referrerName: ev.target.value}), placeholder: 'Their name', className: 'w-full px-4 py-3 rounded-xl border-2 border-navy/10 focus:border-navy focus:outline-none' })
+              ),
+              e('div', null,
+                e('label', { className: 'block font-bold mb-2' }, 'Why do you want to host?'),
+                e('textarea', { value: formData.whyHost, onChange: ev => setFormData({...formData, whyHost: ev.target.value}), placeholder: 'Tell us about your passion for bringing people together...', rows: 5, className: `w-full px-4 py-3 rounded-xl border-2 ${errors.whyHost ? 'border-red-400' : 'border-navy/10'} focus:border-navy focus:outline-none resize-none` }),
+                e('div', { className: 'flex justify-between mt-1' },
+                  errors.whyHost && e('p', { className: 'text-red-500 text-xs' }, errors.whyHost),
+                  e('p', { className: 'text-navy/40 text-xs ml-auto' }, `${formData.whyHost.length} characters (min 50)`)
+                )
+              ),
+              e('div', { className: 'flex gap-4' },
+                e('button', { onClick: () => setStep(1), className: 'flex-1 bg-navy/10 text-navy font-black py-4 rounded-2xl hover:bg-navy/20 transition-all' }, 'Back'),
+                e('button', { onClick: handleNext, className: 'flex-1 bg-navy text-white font-black py-4 rounded-2xl hover:bg-navy/90 transition-all' }, 'Continue')
+              )
+            ),
+            // Step 3
+            step === 3 && e('div', { className: 'space-y-8' },
+              e('div', { className: 'text-center' },
+                e('h1', { className: 'text-4xl font-black mb-2' }, 'Your Gatherings'),
+                e('p', { className: 'text-navy/60' }, 'What kind of experiences will you host?')
+              ),
+              e('div', null,
+                e('label', { className: 'block font-bold mb-3' }, 'What type of experiences? (Select all that apply)'),
+                e('div', { className: 'grid grid-cols-1 gap-3' },
+                  EVENT_CATEGORIES.map(cat =>
+                    e('button', { key: cat.id, type: 'button', onClick: () => toggleEventType(cat.id), className: `p-4 rounded-xl border-2 text-left transition-all ${formData.eventTypes.includes(cat.id) ? 'border-navy bg-navy/5' : 'border-navy/10 hover:border-navy/30'}` },
+                      e('div', { className: 'font-bold' }, cat.label),
+                      e('div', { className: 'text-sm text-navy/60' }, cat.desc)
+                    )
+                  )
+                ),
+                errors.eventTypes && e('p', { className: 'text-red-500 text-xs mt-2' }, errors.eventTypes)
+              ),
+              e('div', null,
+                e('label', { className: 'block font-bold mb-2' }, 'Where would you host?'),
+                e('textarea', { value: formData.hostingLocation, onChange: ev => setFormData({...formData, hostingLocation: ev.target.value}), placeholder: 'Describe your space (home, garden, venue...)', rows: 3, className: `w-full px-4 py-3 rounded-xl border-2 ${errors.hostingLocation ? 'border-red-400' : 'border-navy/10'} focus:border-navy focus:outline-none resize-none` }),
+                errors.hostingLocation && e('p', { className: 'text-red-500 text-xs mt-1' }, errors.hostingLocation)
+              ),
+              e('div', null,
+                e('label', { className: 'block font-bold mb-2' }, 'Area'),
+                e('select', { value: formData.locationArea, onChange: ev => setFormData({...formData, locationArea: ev.target.value}), className: `w-full px-4 py-3 rounded-xl border-2 ${errors.locationArea ? 'border-red-400' : 'border-navy/10'} focus:border-navy focus:outline-none` },
+                  e('option', { value: '' }, 'Select area...'),
+                  ...JHB_AREAS.map(area => e('option', { key: area, value: area }, area))
+                ),
+                errors.locationArea && e('p', { className: 'text-red-500 text-xs mt-1' }, errors.locationArea)
+              ),
+              e('div', null,
+                e('label', { className: 'block font-bold mb-2' }, 'Describe your first event idea'),
+                e('textarea', { value: formData.firstEventIdea, onChange: ev => setFormData({...formData, firstEventIdea: ev.target.value}), placeholder: 'What would your first gathering look like?', rows: 4, className: `w-full px-4 py-3 rounded-xl border-2 ${errors.firstEventIdea ? 'border-red-400' : 'border-navy/10'} focus:border-navy focus:outline-none resize-none` }),
+                errors.firstEventIdea && e('p', { className: 'text-red-500 text-xs mt-1' }, errors.firstEventIdea)
+              ),
+              e('div', { className: 'flex gap-4' },
+                e('button', { onClick: () => setStep(2), className: 'flex-1 bg-navy/10 text-navy font-black py-4 rounded-2xl hover:bg-navy/20 transition-all' }, 'Back'),
+                e('button', { onClick: handleNext, className: 'flex-1 bg-navy text-white font-black py-4 rounded-2xl hover:bg-navy/90 transition-all' }, 'Continue')
+              )
+            ),
+            // Step 4
+            step === 4 && e('div', { className: 'space-y-8' },
+              e('div', { className: 'text-center' },
+                e('h1', { className: 'text-4xl font-black mb-2' }, 'Payout Details'),
+                e('p', { className: 'text-navy/60' }, 'So we can pay you your 70% share')
+              ),
+              e('div', { className: 'p-6 bg-green-50 rounded-2xl border border-green-200' },
+                e('div', { className: 'flex items-center gap-3 mb-2' },
+                  e('span', { className: 'material-symbols-outlined text-green-600' }, 'lock'),
+                  e('h3', { className: 'font-bold text-green-800' }, 'Secure & Encrypted')
+                ),
+                e('p', { className: 'text-sm text-green-700' }, 'Your bank details are encrypted and only used for payouts after successful events.')
+              ),
+              e('div', null,
+                e('label', { className: 'block font-bold mb-2' }, 'Account Holder Name'),
+                e('input', { type: 'text', value: formData.bankAccountName, onChange: ev => setFormData({...formData, bankAccountName: ev.target.value}), placeholder: 'As it appears on your bank account', className: `w-full px-4 py-3 rounded-xl border-2 ${errors.bankAccountName ? 'border-red-400' : 'border-navy/10'} focus:border-navy focus:outline-none` }),
+                errors.bankAccountName && e('p', { className: 'text-red-500 text-xs mt-1' }, errors.bankAccountName)
+              ),
+              e('div', null,
+                e('label', { className: 'block font-bold mb-2' }, 'Bank'),
+                e('select', { value: formData.bankName, onChange: ev => setFormData({...formData, bankName: ev.target.value}), className: `w-full px-4 py-3 rounded-xl border-2 ${errors.bankName ? 'border-red-400' : 'border-navy/10'} focus:border-navy focus:outline-none` },
+                  e('option', { value: '' }, 'Select your bank...'),
+                  ...SA_BANKS.map(bank => e('option', { key: bank, value: bank }, bank))
+                ),
+                errors.bankName && e('p', { className: 'text-red-500 text-xs mt-1' }, errors.bankName)
+              ),
+              e('div', { className: 'grid grid-cols-2 gap-4' },
+                e('div', null,
+                  e('label', { className: 'block font-bold mb-2' }, 'Account Number'),
+                  e('input', { type: 'text', value: formData.accountNumber, onChange: ev => setFormData({...formData, accountNumber: ev.target.value}), className: `w-full px-4 py-3 rounded-xl border-2 ${errors.accountNumber ? 'border-red-400' : 'border-navy/10'} focus:border-navy focus:outline-none` }),
+                  errors.accountNumber && e('p', { className: 'text-red-500 text-xs mt-1' }, errors.accountNumber)
+                ),
+                e('div', null,
+                  e('label', { className: 'block font-bold mb-2' }, 'Branch Code'),
+                  e('input', { type: 'text', value: formData.branchCode, onChange: ev => setFormData({...formData, branchCode: ev.target.value}), className: `w-full px-4 py-3 rounded-xl border-2 ${errors.branchCode ? 'border-red-400' : 'border-navy/10'} focus:border-navy focus:outline-none` }),
+                  errors.branchCode && e('p', { className: 'text-red-500 text-xs mt-1' }, errors.branchCode)
+                )
+              ),
+              e('div', { className: 'flex gap-4' },
+                e('button', { onClick: () => setStep(3), className: 'flex-1 bg-navy/10 text-navy font-black py-4 rounded-2xl hover:bg-navy/20 transition-all' }, 'Back'),
+                e('button', { onClick: handleNext, className: 'flex-1 bg-navy text-white font-black py-4 rounded-2xl hover:bg-navy/90 transition-all' }, 'Submit Application')
+              )
+            )
+          );
+        };
+
+        // Curator Pending
+        const CuratorPendingPage = ({ setView }) => e('div', { className: 'max-w-2xl mx-auto px-4 py-40 text-center space-y-8 animate-in fade-in zoom-in duration-500' },
+          e('div', { className: 'size-24 rounded-full bg-navy/10 text-navy flex items-center justify-center mx-auto' },
+            e('span', { className: 'material-symbols-outlined text-6xl' }, 'hourglass_top')
+          ),
+          e('h2', { className: 'text-4xl font-black' }, 'Thanks for applying!'),
+          e('p', { className: 'text-xl text-navy/60 leading-relaxed max-w-md mx-auto' }, "We'll review your application within 48 hours. Our team may reach out for a brief video call to welcome you to the community."),
+          e('div', { className: 'p-6 bg-primary/5 rounded-2xl max-w-md mx-auto' },
+            e('h3', { className: 'font-bold mb-2' }, 'What happens next?'),
+            e('ol', { className: 'text-left text-sm text-navy/70 space-y-2' },
+              e('li', null, '1. We review your application'),
+              e('li', null, '2. Quick welcome call (15-20 mins)'),
+              e('li', null, "3. You're approved and can create your first event!")
+            )
+          ),
+          e('div', { className: 'pt-8' },
+            e('button', { onClick: () => setView('home'), className: 'bg-navy text-white font-black px-10 py-4 rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition-all' }, 'Back to Home')
+          )
+        );
+
+        // Booking Status
+        const BookingStatusPage = ({ status, setView }) => e('div', { className: 'max-w-2xl mx-auto px-4 py-40 text-center space-y-8 animate-in fade-in duration-500' },
+          e('div', { className: 'size-24 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto' },
+            e('span', { className: 'material-symbols-outlined text-6xl' }, 'mark_email_read')
+          ),
+          e('h2', { className: 'text-4xl font-black' }, 'Your booking is pending approval'),
+          e('p', { className: 'text-xl text-navy/60 leading-relaxed max-w-md mx-auto' }, "The Curator will review your profile and vibes. You'll hear back within 24 hours!"),
+          e('div', { className: 'p-6 bg-navy/5 rounded-2xl max-w-md mx-auto text-left' },
+            e('h3', { className: 'font-bold mb-3' }, 'What happens next?'),
+            e('ol', { className: 'text-sm text-navy/70 space-y-2' },
+              e('li', { className: 'flex items-start gap-2' }, e('span', { className: 'text-primary font-bold' }, '1.'), 'Curator reviews your intro and vibes'),
+              e('li', { className: 'flex items-start gap-2' }, e('span', { className: 'text-primary font-bold' }, '2.'), "You'll be notified via email once approved"),
+              e('li', { className: 'flex items-start gap-2' }, e('span', { className: 'text-primary font-bold' }, '3.'), 'Full address revealed after confirmation')
+            )
+          ),
+          e('div', { className: 'pt-4' },
+            e('button', { onClick: () => setView('explore'), className: 'bg-navy text-white font-black px-10 py-4 rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition-all' }, 'Browse More Gatherings')
+          )
+        );
+
+        // ============================================
+        // INCLUSIVITY MANIFESTO (NEW)
+        // ============================================
+        const InclusivityManifestoPage = ({ setView }) => e('div', { className: 'max-w-4xl mx-auto px-4 py-16 animate-in fade-in duration-500' },
+          e('div', { className: 'text-center mb-16' },
+            e('p', { className: 'text-primary font-bold tracking-widest uppercase mb-4' }, 'Our Promise'),
+            e('h1', { className: 'text-5xl font-black mb-6' }, 'Inclusivity & Belonging Manifesto'),
+            e('p', { className: 'text-xl text-navy/60 italic' }, '"Come be with us, Mntase."')
+          ),
+          e('p', { className: 'text-xl text-navy/70 mb-12 text-center' }, 'Briansfomo exists to end loneliness and create belonging through small, trust-led gatherings. We believe belonging is not accidental. It must be designed, protected, and respected.'),
+          // Principles
+          ...[
+            { num: '1', title: 'Belonging Is a Right, Not a Reward', text: 'If you are here, you belong. Your presence is not conditional on performance, popularity, or perfect behavior. You belong because you showed up.' },
+            { num: '2', title: 'Homes Are Sovereign Spaces', text: 'Every gathering happens in a space that belongs first to the Curator. They set the rules. They define the boundaries. The platform exists to support them, not override them.' },
+          ].map(p => e('div', { key: p.num, className: 'bg-white rounded-3xl p-8 shadow-lg mb-8' },
+            e('div', { className: 'flex items-start gap-4' },
+              e('div', { className: 'size-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0' },
+                e('span', { className: 'text-primary font-black text-xl' }, p.num)
+              ),
+              e('div', null,
+                e('h2', { className: 'text-2xl font-black mb-3' }, p.title),
+                e('p', { className: 'text-navy/70' }, p.text)
+              )
+            )
+          )),
+          // Safe Exit Principle
+          e('div', { className: 'bg-primary/5 rounded-3xl p-8 mb-8 border-2 border-primary/20' },
+            e('div', { className: 'flex items-start gap-4' },
+              e('div', { className: 'size-12 rounded-full bg-primary flex items-center justify-center flex-shrink-0' },
+                e('span', { className: 'text-white font-black text-xl' }, '3')
+              ),
+              e('div', null,
+                e('h2', { className: 'text-2xl font-black mb-3' }, 'Belonging Includes the Right to Leave'),
+                e('p', { className: 'text-navy/70 mb-6' }, 'No one should ever feel trapped at a gathering. We build explicit exit protocols into every event.'),
+                e('div', { className: 'bg-white rounded-2xl p-6 space-y-4' },
+                  e('h3', { className: 'font-bold text-lg text-primary' }, 'Safe Exit Language'),
+                  e('div', { className: 'grid md:grid-cols-2 gap-4' },
+                    e('div', { className: 'p-4 bg-navy/5 rounded-xl' },
+                      e('p', { className: 'font-black text-lg mb-1' }, '"Ndilungile, Mntase"'),
+                      e('p', { className: 'text-sm text-navy/60' }, 'I need a private check-in.')
+                    ),
+                    e('div', { className: 'p-4 bg-navy/5 rounded-xl' },
+                      e('p', { className: 'font-black text-lg mb-1' }, '"Yizo, Mntase"'),
+                      e('p', { className: 'text-sm text-navy/60' }, 'I am leaving now. No questions.')
+                    )
+                  ),
+                  e('p', { className: 'text-sm text-navy/60 italic text-center pt-2' }, 'Belonging includes the right to pause and the right to go. Always.')
+                )
+              )
+            )
+          ),
+          // More Principles
+          ...[
+            { num: '4', title: 'Inclusion Does Not Mean Forced Compatibility', text: 'Curators may decline guests freely, with dignity and privacy. Not every table is for every person. This is not rejection — it\'s curation.' },
+            { num: '5', title: 'We Track Patterns, Not People', text: 'We monitor systems, not individuals. We intervene gently, privately, and rarely. Trust cannot be automated.' },
+            { num: '6', title: 'Dignity Over Optimisation', text: 'We choose care over growth metrics. We will never sacrifice trust density for scale. We will never relax standards to hit targets.' },
+            { num: '7', title: 'Language Shapes Culture', text: 'Words are infrastructure. We use "Mntase" (child from home) because everyone who enters is family. We speak in invitations, not transactions.' },
+          ].map(p => e('div', { key: p.num, className: 'bg-white rounded-3xl p-8 shadow-lg mb-8' },
+            e('div', { className: 'flex items-start gap-4' },
+              e('div', { className: 'size-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0' },
+                e('span', { className: 'text-primary font-black text-xl' }, p.num)
+              ),
+              e('div', null,
+                e('h2', { className: 'text-2xl font-black mb-3' }, p.title),
+                e('p', { className: 'text-navy/70' }, p.text)
+              )
+            )
+          )),
+          // Promise
+          e('div', { className: 'bg-navy text-white rounded-3xl p-12 text-center' },
+            e('h2', { className: 'text-3xl font-black mb-6' }, 'Our Promise'),
+            e('div', { className: 'space-y-4 text-lg' },
+              e('p', null, 'You will always have the right to leave.'),
+              e('p', null, 'You will always be treated with dignity.'),
+              e('p', { className: 'text-primary font-black text-2xl pt-4' }, 'Come be with us, Mntase.')
+            )
+          ),
+          e('div', { className: 'text-center mt-12' },
+            e('button', { onClick: () => setView('home'), className: 'bg-primary text-white font-black px-10 py-4 rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition-all' }, 'Back to Home')
+          )
+        );
+
+        // Safe Exit Page
+        const SafeExitPage = ({ setView }) => e('div', { className: 'max-w-3xl mx-auto px-4 py-16 animate-in fade-in duration-500' },
+          e('div', { className: 'text-center mb-12' },
+            e('span', { className: 'material-symbols-outlined text-6xl text-primary mb-4' }, 'shield'),
+            e('h1', { className: 'text-5xl font-black mb-4' }, 'Your Right to Leave'),
+            e('p', { className: 'text-xl text-navy/60 italic' }, 'Come be with us, Mntase. And leave when you need to.')
+          ),
+          e('div', { className: 'space-y-8' },
+            e('div', { className: 'grid md:grid-cols-2 gap-6' },
+              e('div', { className: 'bg-primary/5 border-2 border-primary/20 rounded-3xl p-8' },
+                e('h2', { className: 'text-2xl font-black mb-2' }, 'If you need a private check-in'),
+                e('p', { className: 'text-navy/60 mb-4' }, 'Say:'),
+                e('div', { className: 'bg-white rounded-2xl p-6 text-center' },
+                  e('p', { className: 'text-3xl font-black text-primary' }, '"Ndilungile, Mntase"'),
+                  e('p', { className: 'text-sm text-navy/60 mt-2' }, '(ndi-lun-GEE-leh, mm-TAH-seh)')
+                ),
+                e('p', { className: 'text-navy/60 mt-4 text-sm' }, "This means you'd like to speak with the host privately. No attention. No explanations.")
+              ),
+              e('div', { className: 'bg-navy/5 border-2 border-navy/20 rounded-3xl p-8' },
+                e('h2', { className: 'text-2xl font-black mb-2' }, 'If you need to leave immediately'),
+                e('p', { className: 'text-navy/60 mb-4' }, 'Say:'),
+                e('div', { className: 'bg-white rounded-2xl p-6 text-center' },
+                  e('p', { className: 'text-3xl font-black text-navy' }, '"Yizo, Mntase"'),
+                  e('p', { className: 'text-sm text-navy/60 mt-2' }, '(YEE-zoh, mm-TAH-seh)')
+                ),
+                e('p', { className: 'text-navy/60 mt-4 text-sm' }, "This means you're leaving now. No questions. No persuasion. This will be respected.")
+              )
+            ),
+            e('div', { className: 'bg-white rounded-3xl p-8 shadow-lg' },
+              e('h2', { className: 'text-2xl font-black mb-6' }, 'What happens next'),
+              e('ul', { className: 'space-y-4' },
+                ['You may leave quietly. The event continues.', 'Later, we may check in privately — only if you want.', 'No one will question your decision.'].map((item, i) =>
+                  e('li', { key: i, className: 'flex items-start gap-4' },
+                    e('span', { className: 'material-symbols-outlined text-primary' }, 'check_circle'),
+                    e('span', null, item)
+                  )
+                )
+              )
+            ),
+            e('div', { className: 'bg-primary text-white rounded-3xl p-8 text-center' },
+              e('h2', { className: 'text-2xl font-black mb-4' }, 'Why we do this'),
+              e('p', { className: 'text-xl' }, 'Belonging includes the right to pause and the right to go.'),
+              e('p', { className: 'text-2xl font-black mt-4' }, 'Always.')
+            )
+          ),
+          e('div', { className: 'text-center mt-12' },
+            e('button', { onClick: () => setView('inclusivity'), className: 'text-primary font-bold hover:underline' }, 'Read our full Inclusivity Manifesto →')
+          )
+        );
+
+        // ============================================
+        // MAIN APP
+        // ============================================
+        function App() {
+          const [currentView, setCurrentView] = useState('home');
+          const [selectedEvent, setSelectedEvent] = useState(null);
+          const [userProfile, setUserProfile] = useState(null);
+          const [userRole, setUserRole] = useState('none');
+          const [bookingStatus, setBookingStatus] = useState('none');
+
+          const getCategoryFilter = () => {
+            if (currentView.startsWith('explore-')) return currentView.replace('explore-', '');
+            return null;
+          };
+
+          const renderView = () => {
+            switch (currentView) {
+              case 'home': return e(LandingPage, { setView: setCurrentView });
+              case 'explore':
+              case 'explore-sit':
+              case 'explore-walk':
+              case 'explore-listen':
+              case 'explore-play':
+              case 'explore-quiet':
+                return e(ExplorePage, { setView: setCurrentView, setSelectedEvent, categoryFilter: getCategoryFilter() });
+              case 'event-detail':
+                return e(EventDetailPage, { event: selectedEvent, setView: setCurrentView, userProfile, setBookingStatus });
+              case 'join-movement':
+                return e(JoinMovementPage, { setView: setCurrentView });
+              case 'mntase-apply':
+                return e(MntaseApplicationPage, { setView: setCurrentView, setUserProfile });
+              case 'mntase-pending':
+                return e(MntasePendingPage, { setView: setCurrentView });
+              case 'apply':
+                return e(CuratorApplicationPage, { setView: setCurrentView, setUserRole });
+              case 'apply-pending':
+                return e(CuratorPendingPage, { setView: setCurrentView });
+              case 'booking-status':
+                return e(BookingStatusPage, { status: bookingStatus, setView: setCurrentView });
+              case 'inclusivity':
+                return e(InclusivityManifestoPage, { setView: setCurrentView });
+              case 'safe-exit':
+                return e(SafeExitPage, { setView: setCurrentView });
+              default:
+                return e(LandingPage, { setView: setCurrentView });
+            }
+          };
+
+          return e('div', { className: 'min-h-screen flex flex-col bg-background' },
+            ['home', 'explore'].includes(currentView) || currentView.startsWith('explore-') ? e(ValentineBanner, { onExplore: () => setCurrentView('explore') }) : null,
+            e(Header, { currentView, setView: setCurrentView, userRole }),
+            e('main', { className: 'flex-1' }, renderView()),
+            e(Footer, { setView: setCurrentView })
+          );
+        }
+
+        // Mount
+        const root = createRoot(document.getElementById('root'));
+        root.render(e(App));
+    </script>
 </body>
 </html>
